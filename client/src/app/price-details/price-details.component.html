@@ -1,0 +1,202 @@
+<div class="d-flex align-items-center justify-content-center ">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <form [formGroup]="priceForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group">
+                            <label for="customerName">customer Name</label>
+                            <input type="text" required class="form-control" id="customerName" [(ngModel)]="customerName" name="customerName" formControlName="first_name" placeholder="Enter Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="customerNo">customer No</label>
+                            <input type="text" required class="form-control" maxlength="10" (change)="customerNoCheck($event)" id="customerNo" name="customerNo" [(ngModel)]="customerNo" formControlName="phone" placeholder="Enter No">
+                        </div>
+                        <div class="errorMsg" *ngIf="phoneErrorMessage"> Please Ender Valid Number</div>
+                        <div class="errorMsg" *ngIf="phoneErrorValidMessage">Please Ender 10 Digit Valid Phone Number</div>
+                        <div class="form-group">
+                            <label for="customerEmail">customer Email</label>
+                            <input type="text" class="form-control" id="customerEmail" name="customerEmail" placeholder="Enter Email" [(ngModel)]="customerEmail" formControlName="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="pincodeNo">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" [(ngModel)]="address" formControlName="address" placeholder="Enter Address">
+                        </div>
+                        <div class="form-group">
+                            <label for="pincodeNo">Pin Code</label>
+                            <input type="text" class="form-control" id="pincodeNo" maxlength="6" [(ngModel)]="pincodeNo" (change)="customerPincodeCheck($event)" name="pincodeNo" formControlName="pincode" placeholder="Enter Area Pincode">
+                        </div>
+                        <div class="errorMsg" *ngIf="pincodeErrorMessage"> Please Ender Valid Number</div>
+                        <div class="errorMsg" *ngIf="pincodeErrorValidMessage">Please Ender 6 Digit Valid pincode Number</div>
+                        <div class="form-group" *ngIf="customerName&&customerNo&&pincodeNo&&address">
+                            <label for="category">Category</label>
+                            <select class="form-control" id="category" (change)="populatetype($event)" [(ngModel)]="category" name="category" formControlName="category">
+                                  <option *ngFor="let s of categories" [value]="s.id">{{s.name}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="customerName&&customerNo&&pincodeNo&&address">
+                            <label for="categoryType">Category Type</label>
+                            <select class="form-control" id="categoryType" name="categoryType" (change)="populateCategorytype($event)" [(ngModel)]="categoryType" formControlName="categoryType">
+                                  <option *ngFor="let s of categoryTypeFilter" [value]="s.id">{{s.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="categoryType==='1'">
+                            <label for="boreSize">Bore Size</label>
+                            <select class="form-control" id="boreSize" name="boreSize" [(ngModel)]="boreSize" formControlName="boreSize">
+                                  <option *ngFor="let s of boreSizes" [value]="s">{{s}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="categoryType==='1' || categoryType==='2' || categoryType==='4'">
+                            <label for="totalDepth">Total Depth</label>
+                            <input type="text" class="form-control" id="totalDepth" name="totalDepth" [(ngModel)]="totalDepth" formControlName="totalDepth" placeholder="Enter Total Depth (Example:200ft)">
+                        </div>
+                        <div class="form-group" *ngIf="categoryType==='1' || categoryType==='2' || categoryType==='4'">
+                            <label for="waterLevel">Water Leval</label>
+                            <input type="text" class="form-control" id="waterLevel" name="waterLevel" [(ngModel)]="waterLevel" formControlName="waterLevel" placeholder="Enter Water Leval  (Example:50ft)">
+                        </div>
+                        <div class="form-group" *ngIf="categoryType==='1' || categoryType==='2' ">
+                            <label for="pumpLowringDepth">Pump Lowring Depth</label>
+                            <input type="text" class="form-control" id="pumpLowringDepth" name="pumpLowringDepth" [(ngModel)]="pumpLowringDepth" formControlName="pumpLowringDepth" placeholder="Enter Pump Lowring Depth (Example:100ft)">
+                        </div>
+                        <div class="form-group" *ngIf="meterBox">
+                            <label for="inchLeval">Inch Leval</label>
+                            <input type="text" class="form-control" id="inchLeval" name="inchLeval" [(ngModel)]="inchLeval" formControlName="inchLeval" placeholder="Enter Meter">
+                        </div>
+                        <div class="form-group" *ngIf="chooseBox">
+                            <label for="acre">Acre</label>
+                            <input type="text" class="form-control" id="acre" name="acre" formControlName="acre" [(ngModel)]="acre" placeholder="Enter Acre">
+                        </div>
+                        <div class="form-group" *ngIf="chooseBox">
+                            <label for="crap">Crop</label>
+                            <input type="text" class="form-control" id="crap" name="crap" formControlName="crap" [(ngModel)]="crap" placeholder="Enter Crap">
+                        </div>
+                        <div class="form-group" *ngIf="chooseBox">
+                            <label for="waterIrrigation">Water Irrigation</label>
+                            <select class="form-control" id="waterIrrigation" name="waterIrrigation" [(ngModel)]="waterIrrigation" formControlName="waterIrrigation">
+                                  <option *ngFor="let s of waterIrrigations" [value]="s">{{s}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="chooseBox">
+                            <label for="deliverySize">Delivery Size</label>
+                            <select class="form-control" id="deliverySize" name="deliverySize" (change)="findDeliverDPH($event)" [(ngModel)]="deliverySize" formControlName="deliverySize">
+                                  <option *ngFor="let s of deliverySizes" [value]="s">{{s}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="chooseBox">
+                            <label for="deliveryPerHr">Delivery Per Hour</label>
+                            <select class="form-control" id="deliveryPerHr" name="deliveryPerHr" [(ngModel)]="deliveryPerHr" formControlName="deliveryPerHr">
+                                  <option *ngFor="let s of deliveryPerHrsFilter" [value]="s.name">{{s.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" *ngIf="chooseBox">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="accessories" [(ngModel)]="accessories" formControlName="accessories" id="accessories1" value="completeAccessories">
+                                <label class="form-check-label" for="accessories1">Complete Accessories</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="accessories" [(ngModel)]="accessories" formControlName="accessories" id="accessories2" value="customAccessories">
+                                <label class="form-check-label" for="accessories2">Customise Accessories</label>
+                            </div>
+                        </div>
+                        <div class="form-group" *ngIf="accessories === 'customAccessories'">
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="pVPanel" name="pVPanel" [(ngModel)]="pVPanel" formControlName="pVPanel">
+                                <label class="form-check-label" for="pVPanel">
+                                    PV Panel
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="vFDPanelBox" name="vFDPanelBox" [(ngModel)]="vFDPanelBox" formControlName="vFDPanelBox">
+                                <label class="form-check-label" for="vFDPanelBox">
+                                    VFD Panel Box
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="mountingStructure" name="mountingStructure" [(ngModel)]="mountingStructure" formControlName="mountingStructure">
+                                <label class="form-check-label" for="mountingStructure">
+                                    Mounting Structure
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="dCCables" name="dCCables" [(ngModel)]="dCCables" formControlName="dCCables">
+                                <label class="form-check-label" for="dCCables">
+                                    DC Cables (+) (-)
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="earthKit" name="earthKit" [(ngModel)]="earthKit" formControlName="earthKit">
+                                <label class="form-check-label" for="earthKit">
+                                    Earth Kit
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="othersAccessories" name="othersAccessories" [(ngModel)]="othersAccessories" formControlName="othersAccessories">
+                                <label class="form-check-label" for="othersAccessories">
+                                    Others Accessories
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="installation" name="installation" [(ngModel)]="installation" formControlName="installation">
+                                <label class="form-check-label" for="installation">
+                                    Installation
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="transportation" name="transportation" [(ngModel)]="transportation" formControlName="transportation">
+                                <label class="form-check-label" for="transportation">
+                                    Transportation
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="motorPump" name="motorPump" [(ngModel)]="motorPump" formControlName="motorPump">
+                                <label class="form-check-label" for="motorPump">
+                                    Motor & Pump
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="lightingArrestor" name="lightingArrestor" [(ngModel)]="lightingArrestor" formControlName="lightingArrestor">
+                                <label class="form-check-label" for="lightingArrestor">
+                                    Lighting Arrestor
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="hDPHose25" name="hDPHose25" [(ngModel)]="hDPHose25" formControlName="hDPHose25">
+                                <label class="form-check-label" for="hDPHose25">
+                                    2.5" HDP Hose
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="cable3CX25Sqmm" name="cable3CX25Sqmm" [(ngModel)]="cable3CX25Sqmm" formControlName="cable3CX25Sqmm">
+                                <label class="form-check-label" for="cable3CX25Sqmm">
+                                    3 C * 2.5 Sq mm Cable
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rope16mm" name="rope16mm" [(ngModel)]="rope16mm" formControlName="rope16mm">
+                                <label class="form-check-label" for="rope16mm">
+                                    16 mm Rope
+                              </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="borewellAccessories" name="borewellAccessories" [(ngModel)]="borewellAccessories" formControlName="borewellAccessories">
+                                <label class="form-check-label" for="borewellAccessories">
+                                    Borewell Accessories
+                              </label>
+                            </div>
+                        </div>
+
+                        <div class="errorMsg" *ngIf="overAllErrorMessage"> Please Fill Name , phone No , Adress, PinCode</div>
+                        <div class="m-3">
+                            <button class="btn btn-success " [disabled]="phoneErrorMessage || phoneErrorValidMessage">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

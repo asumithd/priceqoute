@@ -1,0 +1,35 @@
+<div class="priceContainer">
+    <div class="priceTitleBox">
+        <h4 class="priceTitle text-center">
+            3hp solar pump system 20m - (40 ft)
+        </h4>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">S No</th>
+                        <th scope="col">DESCRIPTION</th>
+                        <th scope="col">SPECIFICAATION</th>
+                        <th scope="col">UNIT</th>
+                        <th scope="col">TOTAL PRICE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let priceDetail of listFilter[0].details ;let last=last">
+
+                        <th scope="row">{{priceDetail.sn}}</th>
+                        <td>{{priceDetail.description}}</td>
+                        <td>{{priceDetail.specification}}</td>
+                        <td>{{priceDetail.qty}}</td>
+                        <td>{{priceDetail.price}}</td>
+
+
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-end align-items-end">
+                {{spsList[0].totalAmount}}
+            </div>
+        </div>
+    </div>
+</div>
